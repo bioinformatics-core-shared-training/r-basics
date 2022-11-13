@@ -1,0 +1,23 @@
+---
+title: "R Basics for Cancer Scientists"
+---
+
+# Introduction
+
+This site contains the materials for a short training session introducing R, a
+programming language for statistical data analysis, run by the [Bioinformatics Core](https://www.cruk.cam.ac.uk/core-facilities/bioinformatics-core)
+facility at the [Cancer Research UK Cambridge Institute](https://www.cruk.cam.ac.uk).
+
+### Instructors
+
+* [Matt Eldridge](https://www.cruk.cam.ac.uk/author/matthew-eldridge)
+
+# Description
+
+**R** is one of the leading programming languages in **Data Science** and the
+most widely used within CRUK CI for interacting with cancer biology datasets.
+
+In this training course, we aim to provide a very brief introduction to R aimed
+at cancer scientists who would like to be better able to manipulate, visualize
+and analyze their data.
+
