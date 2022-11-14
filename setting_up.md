@@ -28,6 +28,8 @@ functions for just about any data type you can imagine. One of our favourite
 collections of packages, the **tidyverse**, is, however, somewhat more general
 purpose.
 
+![](images/tidyverse_package_logos.png){width=50%}
+
 It is often the case that data need to be restructured or modified in some way
 for the required analysis or visualization and the **tidyverse** packages
 provide a useful and coherent set of functions for reading and manipulating
@@ -140,7 +142,7 @@ install.packages('tidyverse')
 
 ![](images/install_tidyverse.png){width=90%}
 
-# Check everything is set up correctly
+# Checking everything is set up correctly
 
 In the Console tab in RStudio, type the following commands at the `>` prompt:
 
@@ -156,7 +158,8 @@ t.test(extra ~ group, data = sleep)
 ggplot(mpg, aes(displ, hwy, colour = class)) + geom_point()
 ```
 
-You should see the same output as in the following screenshot:
+You should see the same output in your console and plot in the viewer pane as
+shown in the following screenshot:
 
 ![](images/check_set_up.png){width=100%}
 
