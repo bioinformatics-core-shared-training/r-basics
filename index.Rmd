@@ -21,3 +21,11 @@ In this training course, we aim to provide a very brief introduction to R aimed
 at cancer scientists who would like to be better able to manipulate, visualize
 and analyze their data.
 
+# Schedule
+
+1. [Getting set up](setting_up.html) - install R, RStudio and the tidyverse packages in advance of the training session
+
+2. [Introduction to R](introduction_to_r.html) - get acquainted with some key concepts with working in R
+
+3. [Working with tabular data](tabular_data.html) - a whistle-stop tour of some of the most common operations for manipulating and visualizing tabular data in R
+
