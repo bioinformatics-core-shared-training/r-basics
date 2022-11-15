@@ -142,6 +142,9 @@ install.packages('tidyverse')
 
 ![](images/install_tidyverse.png){width=90%}
 
+Installing all the tidyverse packages may take a few minutes during which time
+you will see a lot of output in the console window.
+
 # Checking everything is set up correctly
 
 In the Console tab in RStudio, type the following commands at the `>` prompt:
