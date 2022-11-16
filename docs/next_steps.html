@@ -11,7 +11,7 @@
 
 
 
-<title>Getting set up</title>
+<title>Next steps</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -35,6 +35,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -351,171 +353,12 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Getting set up</h1>
+<h1 class="title toc-ignore">Next steps</h1>
 
 </div>
 
 
-<blockquote>
-<h4 id="objectives">Objectives</h4>
-<ul>
-<li>Install R and RStudio</li>
-<li>Install the tidyverse collection of R packages</li>
-</ul>
-</blockquote>
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
-<p>In this course we will be using <strong>R</strong>,
-<strong>RStudio</strong>, and some functions provided by a collection of
-packages known as the <strong>tidyverse</strong>.</p>
-<p><strong>R</strong> is a programming language for statistical
-computing and graphics. The R system provides an interpreter that
-executes commands typed at a command line. It also provides a range of
-statistics and plotting functions out-of-the-box.</p>
-<p>Most computational biologists work with R using
-<strong>RStudio</strong>, an integrated development environment that
-provides lots of useful tools to make working in R much easier and more
-productive. RStudio is a separate program you can install alongside R on
-your computer. You will usually open RStudio instead of R directly, and
-use the R session it provides.</p>
-<p>One of the compelling reasons to learn R is the vast range of useful
-packages that have been developed and made available that give you
-access to specialized functions for just about any data type you can
-imagine. One of our favourite collections of packages, the
-<strong>tidyverse</strong>, is, however, somewhat more general
-purpose.</p>
-<p><img src="images/tidyverse_package_logos.png"
-style="width:50.0%" /></p>
-<p>It is often the case that data need to be restructured or modified in
-some way for the required analysis or visualization and the
-<strong>tidyverse</strong> packages provide a useful and coherent set of
-functions for reading and manipulating tabular data. The flexible and
-very popular <strong>ggplot2</strong> package for creating graphs is
-also part of the tidyverse. Packages such as the tidyverse are easily
-installed from a menu in RStudio or at the R command prompt.</p>
-</div>
-<div id="installation-options" class="section level1">
-<h1>Installation options</h1>
-<p>To get ready for the training session you have two options:</p>
-<ol style="list-style-type: decimal">
-<li><p>Install R and RStudio on your laptop computer</p></li>
-<li><p>Use a pre-installed R environment by logging into an RStudio
-server session</p></li>
-</ol>
-<p>Installing R on your own computer is the best choice if you already
-know you want to work with your data in R. However, if you’re attending
-the session to see what R can do but are not sure yet if it’s really for
-you, then using one of the RStudio servers might be the better option.
-Please note that the servers will only be available for a limited
-time.</p>
-<p>The following instructions are for those who will be installing and
-running R on their own computer. If you’d prefer to use RStudio server
-in which everything is already set up, please contact the instructor for
-login details.</p>
-<p>If you already have R and RStudio server installed you may want to
-check on what versions you are running and consider updating to the
-latest versions that are available - see the section on upgrading
-below.</p>
-</div>
-<div id="installing-r" class="section level1">
-<h1>Installing R</h1>
-<div id="windows" class="section level2">
-<h2>Windows</h2>
-<ul>
-<li><p>Download the installer from the <a
-href="https://cran.r-project.org/">CRAN website</a>, following the
-‘Download R for Windows’ and ‘base’ links</p></li>
-<li><p>Run the .exe file that you just downloaded, named something like
-R-4.2.2-win.exe, by clicking on it in the Downloads area in your web
-browser</p></li>
-</ul>
-</div>
-<div id="mac-os" class="section level2">
-<h2>Mac OS</h2>
-<ul>
-<li><p>Download the installer from the <a
-href="https://cran.r-project.org/">CRAN website</a>, following the
-‘Download R for macOS’ link and choosing the installer that matches your
-hardware, e.g. Apple M1 (ARM) or Intel</p></li>
-<li><p>Run the .pkg file you just downloaded, named something like
-R-4.2.2.pkg, by clicking in it in the Downloads area in your web
-browser</p></li>
-</ul>
-<p><img src="images/r_download.png" style="width:90.0%" /></p>
-</div>
-</div>
-<div id="installing-rstudio" class="section level1">
-<h1>Installing RStudio</h1>
-<p>Please note that you should install R before you install RStudio.</p>
-<p>RStudio is developed by Posit, a company that until recently was
-confusingly also called RStudio. The desktop version of RStudio is free
-and versions are available for Windows, Mac OS and Linux.</p>
-<ul>
-<li><p>Download the installer from <a
-href="https://posit.co/download/rstudio-desktop"
-class="uri">https://posit.co/download/rstudio-desktop</a></p></li>
-<li><p>Run the .exe (Windows) or open the .dmg (Mac OS) file by clicking
-on it in the downloads area in your web browser</p></li>
-</ul>
-<p>The page contains a button for downloading the RStudio installer and
-should recognize your operating system. If it doesn’t get it right,
-e.g. if it suggests you ‘Download RStudio Desktop for Windows’ when
-you’re using a MacBook, you can scroll further down the page to find
-links to all the available installers and choose the correct one.</p>
-<p><img src="images/rstudio_download.png" style="width:90.0%" /></p>
-</div>
-<div id="upgrading-from-older-versions" class="section level1">
-<h1>Upgrading from older versions</h1>
-<p>If you already have R and RStudio server installed you may want to
-check that you’re using the latest versions. R version 4.0 or above
-should be ok for this training session.</p>
-<ul>
-<li><p>Open RStudio, and click on “Help” &gt; “Check for updates”. If a
-new version is available, quit RStudio, and download and install the
-latest version (see above)</p></li>
-<li><p>If you’ve just opened RStudio the first thing that appears in the
-Console window should indicate the version of R you are running.
-Alternatively you can type <code>sessionInfo()</code> at the command
-prompt (<code>&gt;</code>) in the Console window.</p></li>
-<li><p>Check the <a href="https://cran.r-project.org">CRAN website</a>
-to see whether a more recent version of R is available. If so, download
-the installer for your operating system (Windows, Mac OS, etc.) and
-install as described above.</p></li>
-</ul>
-<p><br/></p>
-<p><img src="images/rstudio_check_for_updates.png"
-style="width:100.0%" /></p>
-<p><br/></p>
-</div>
-<div id="installing-the-tidyverse-packages" class="section level1">
-<h1>Installing the tidyverse packages</h1>
-<p>After installing R and RStudio you’ll need to install the tidyverse
-packages.</p>
-<ul>
-<li><p>Open RStudio from the Start menu in Windows or the Launchpad in
-Mac OS, i.e. the same way you’d open other programs such as
-Excel</p></li>
-<li><p>Locate the ‘Console’ tab</p></li>
-<li><p>At the command prompt (<code>&gt;</code>), type the following
-command:</p></li>
-</ul>
-<pre><code>install.packages(&#39;tidyverse&#39;)</code></pre>
-<p><img src="images/install_tidyverse.png" style="width:90.0%" /></p>
-<p>Installing all the tidyverse packages may take a few minutes during
-which time you will see a lot of output in the console window.</p>
-</div>
-<div id="checking-everything-is-set-up-correctly"
-class="section level1">
-<h1>Checking everything is set up correctly</h1>
-<p>In the Console tab in RStudio, type the following commands at the
-<code>&gt;</code> prompt:</p>
-<pre><code>library(tidyverse)</code></pre>
-<pre><code>t.test(extra ~ group, data = sleep)</code></pre>
-<pre><code>ggplot(mpg, aes(displ, hwy, colour = class)) + geom_point()</code></pre>
-<p>You should see the same output in your console and plot in the viewer
-pane as shown in the following screenshot:</p>
-<p><img src="images/check_set_up.png" style="width:100.0%" /></p>
-</div>
+<p>In preparation - coming soon</p>
 
 
 

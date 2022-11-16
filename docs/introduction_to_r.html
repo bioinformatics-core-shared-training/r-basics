@@ -333,6 +333,9 @@ div.tocify {
 <li>
   <a href="tabular_data.html">Tabular data</a>
 </li>
+<li>
+  <a href="next_steps.html">Next steps</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -355,7 +358,441 @@ div.tocify {
 </div>
 
 
-<p>In preparation - coming soon</p>
+<blockquote>
+<h4 id="objectives">Objectives</h4>
+<ul>
+<li>Get acquainted with the R command prompt</li>
+<li>Create named objects and assign values to them</li>
+<li>Create and work with vectors containing series of values</li>
+<li>Call functions and use arguments to change their default
+options</li>
+<li>Look at how R handles missing values</li>
+<li>Write R code in a script</li>
+</ul>
+</blockquote>
+<div id="using-r-as-a-calculator" class="section level1">
+<h1>Using R as a calculator</h1>
+<p>Open RStudio and type the following at the command prompt,
+<strong><code>&gt;</code></strong> (in the console tab pane), to add two
+numbers together.</p>
+<pre class="r"><code>4 + 3</code></pre>
+<pre><code>[1] 7</code></pre>
+<p>Clearly the answer is 7 but what’s the <code>[1]</code> that you see
+printed before it?</p>
+<p>Sometimes operations will return more than one value and these may
+get written across several lines. Here’s an example using one of the
+built-in datasets that contains the lengths of the major North American
+rivers.</p>
+<pre class="r"><code>rivers</code></pre>
+<pre><code>  [1]  735  320  325  392  524  450 1459  135  465  600  330  336  280  315  870
+ [16]  906  202  329  290 1000  600  505 1450  840 1243  890  350  407  286  280
+ [31]  525  720  390  250  327  230  265  850  210  630  260  230  360  730  600
+ [46]  306  390  420  291  710  340  217  281  352  259  250  470  680  570  350
+ [61]  300  560  900  625  332 2348 1171 3710 2315 2533  780  280  410  460  260
+ [76]  255  431  350  760  618  338  981 1306  500  696  605  250  411 1054  735
+ [91]  233  435  490  310  460  383  375 1270  545  445 1885  380  300  380  377
+[106]  425  276  210  800  420  350  360  538 1100 1205  314  237  610  360  540
+[121] 1038  424  310  300  444  301  268  620  215  652  900  525  246  360  529
+[136]  500  720  270  430  671 1770</code></pre>
+<p>The numbers in brackets are indexes for the first element printed on
+each line, so the first line will always begin with <code>[1]</code> as
+that line starts with the first element. If a subsequent line starts
+with <code>[11]</code>, for example, then the first element printed on
+that line is the eleventh element within the list.</p>
+<blockquote>
+<p><strong><em>Exercise</em></strong></p>
+<p>Try doing some subtractions, multiplications and divisions at the R
+command prompt.</p>
+<p>The operator for multiplication is <code>*</code> and for division it
+is <code>/</code>.</p>
+</blockquote>
+<p>Let’s add several numbers together.</p>
+<pre class="r"><code>32.33 + 28.6 + 29.49 + 25.7 + 30.81</code></pre>
+<pre><code>[1] 146.93</code></pre>
+<p>And we’ll divide by 5 to get the mean value.</p>
+<pre class="r"><code>32.33 + 28.6 + 29.49 + 25.7 + 30.81 / 5</code></pre>
+<pre><code>[1] 122.282</code></pre>
+<p>That doesn’t look right. Can you see how R has interpreted this?</p>
+<p>The last of our values, 30.81, was divided by 5 before adding the
+result to the other values. This is because multiplication and division
+operations take precedence over addition and subtraction and so they are
+calculated first.</p>
+<p>We can use parentheses to ensure that our values are added together
+before dividing by the number of values.</p>
+<pre class="r"><code>(32.33 + 28.6 + 29.49 + 25.7 + 30.81) / 5</code></pre>
+<pre><code>[1] 29.386</code></pre>
+</div>
+<div id="creating-objects-in-r" class="section level1">
+<h1>Creating objects in R</h1>
+<p>If we want to use our average value, perhaps in another calculation,
+we need some way of storing it for use later. We need to assign the
+value to an <em>object</em> and we can do this with the assignment
+operator, <code>&lt;-</code>.</p>
+<pre class="r"><code>average_tumour_size &lt;- (32.33 + 28.6 + 29.49 + 25.7 + 30.81) / 5</code></pre>
+<p>It is also possible to use <code>=</code> for assignment and if
+you’re familiar with other programming languages this will feel more
+natural. <code>&lt;-</code> is preferred though and there are some
+situations where using <code>=</code> may have unforeseen
+consequences.</p>
+<p>Our new object is listed in the Environment tab in the top right
+panel in RStudio.</p>
+<p><img src="images/object_assignment.png" style="width:100.0%" />
+Objects are commonly referred to as <em>variables</em>, a term commonly
+used in other programming languages.</p>
+<p>We can now use our object in further calculations. For example, if
+our tumour sizes were measured in millimetres and we wanted to convert
+the average value to centimetres, we could do the following:</p>
+<pre class="r"><code>average_tumour_size / 10</code></pre>
+<pre><code>[1] 2.9386</code></pre>
+<p>We could assign the converted value to another object,</p>
+<pre class="r"><code>average_tumour_size_cm &lt;- average_tumour_size / 10</code></pre>
+<p>or overwrite the existing one.</p>
+<pre class="r"><code>average_tumour_size &lt;- average_tumour_size / 10</code></pre>
+<p>To check a value of our object, we can get R to print it out in the
+console by typing its name.</p>
+<pre class="r"><code>average_tumour_size</code></pre>
+<pre><code>[1] 2.9386</code></pre>
+</div>
+<div id="vectors-and-data-types" class="section level1">
+<h1>Vectors and data types</h1>
+<p>A <em>vector</em> is an ordered series of values and is the simplest
+data structure in R. The <code>rivers</code> data set is an example of a
+vector.</p>
+<p>We can create a vector of our tumour sizes using the <code>c()</code>
+function.</p>
+<pre class="r"><code>tumour_sizes &lt;- c(32.33, 28.6, 29.49, 25.7, 30.81)
+tumour_sizes</code></pre>
+<pre><code>[1] 32.33 28.60 29.49 25.70 30.81</code></pre>
+<p>We’ll introduce functions in the next section but for now we note
+that <code>c</code> stands for ‘combine’ and the <code>c()</code>
+function combines the values it is given within the parentheses into a
+vector.</p>
+<p>Most operations in R are <em>‘vectorized’</em>, i.e. they can work on
+vectors. For example we can convert our tumour sizes to centimetres in a
+single operation.</p>
+<pre class="r"><code>tumour_sizes_cm &lt;- tumour_sizes / 10
+tumour_sizes_cm</code></pre>
+<pre><code>[1] 3.233 2.860 2.949 2.570 3.081</code></pre>
+<p>Vectors contain values that are all of the same type. So far, we’ve
+only been using numeric values but there are some other atomic data
+types including Boolean (logical) and character values.</p>
+<p>Character values are strings of characters enclosed in quotation
+marks.</p>
+<pre class="r"><code>drug &lt;- &quot;Tamoxifen&quot;</code></pre>
+<pre class="r"><code>drugs &lt;- c(&quot;Tamoxifen&quot;, &quot;Fulvestrant&quot;, &quot;Olaparib&quot;, &quot;Paclitaxel&quot;)</code></pre>
+<p>Logical values can be either <code>TRUE</code> or
+<code>FALSE</code>.</p>
+<pre class="r"><code>positive_outcomes &lt;- c(TRUE, FALSE, FALSE, TRUE, TRUE)</code></pre>
+<p>Logical values are produced when using logical operators, e.g. the
+greater than operator <code>&gt;</code>.</p>
+<pre class="r"><code>average_tumour_size_cm &gt; 3</code></pre>
+<pre><code>[1] FALSE</code></pre>
+<p>We can also do this on vectors to produce logical vectors, something
+we’ll come back to shortly.</p>
+<pre class="r"><code>tumours_larger_than_30mm &lt;- tumour_sizes &gt; 30
+tumours_larger_than_30mm</code></pre>
+<pre><code>[1]  TRUE FALSE FALSE FALSE  TRUE</code></pre>
+<blockquote>
+<p><strong><em>Exercise</em></strong></p>
+<p>Try creating a vector that contains values with different types
+(numeric, logical, character)</p>
+<p>Try different combinations of types and see what happens, for
+example</p>
+<p><code>c(FALSE, 2.5)</code></p>
+<p><code>c(FALSE, 2.5, "hello")</code></p>
+</blockquote>
+</div>
+<div id="functions" class="section level1">
+<h1>Functions</h1>
+<p>R contains a large set of functions that do many useful operations.
+Let’s have a look at a simple example, the <code>log2()</code> function
+that calculates the base 2 logarithm of a number.</p>
+<pre class="r"><code>log2(4)</code></pre>
+<pre><code>[1] 2</code></pre>
+<p>A function usually takes one or more inputs known as
+<em>arguments</em>. Functions often, but not always, return a value,
+which in turn can be assigned to an object.</p>
+<pre class="r"><code>a &lt;- 10.25
+b &lt;- log2(a)
+b</code></pre>
+<pre><code>[1] 3.357552</code></pre>
+<p>The <code>log2()</code> function only takes a single argument. Let’s
+try a function that can take multiple arguments:
+<code>round()</code></p>
+<pre class="r"><code>round(average_tumour_size)</code></pre>
+<pre><code>[1] 3</code></pre>
+<p>By default the <code>round()</code> function rounds to the nearest
+whole number. We can specify the number of digits to round to using the
+additional <code>digits</code> argument.</p>
+<pre class="r"><code>round(average_tumour_size, digits = 2)</code></pre>
+<pre><code>[1] 2.94</code></pre>
+<p>Information about a function can be found on its help page by typing
+<code>?round</code> or <code>help(round)</code> at the command
+prompt.</p>
+<pre class="r"><code>?round</code></pre>
+<p>The ‘Help’ tab should be visible in the lower right panel in
+RStudio.</p>
+<p><img src="images/rstudio_help_tab_pane.png"
+style="width:100.0%" /></p>
+<p>The <em>Usage</em> section shows that the default value for the
+<code>digits</code> argument is 0 and that <code>digits</code> refers to
+the number of decimal places. The help page also gives information for
+some related functions, <code>signif()</code>, <code>ceiling()</code>,
+etc.</p>
+<p>So if we don’t specify the value for digits, it will round to 0
+digits (decimal places), i.e. to the nearest whole number.</p>
+<p>If we provide the arguments in the exact same order as they are
+defined we don’t have to name them.</p>
+<pre class="r"><code>round(average_tumour_size, 2)</code></pre>
+<pre><code>[1] 2.94</code></pre>
+<p>It’s good practice to put the non-optional arguments, like the number
+we’re rounding in this case, first in the function call, in the order
+they’re expected (in which case you don’t need to name them), and then
+use names for all the optional arguments you’re specifying. It will make
+it much easier for someone reading your code and is less error-prone,
+particularly when using functions with many arguments.</p>
+<p>Many functions take vector arguments. Some are <em>vectorized</em>
+and carry out the same operation on all the elements of the vector,
+e.g.</p>
+<pre class="r"><code>log10(tumour_sizes)</code></pre>
+<pre><code>[1] 1.509606 1.456366 1.469675 1.409933 1.488692</code></pre>
+<p>Others compute a summary value from the given vector. For example, we
+can pass our vector of tumour sizes to the <code>mean()</code> function
+to compute the average value we calculated earlier.</p>
+<pre class="r"><code>average_tumour_size &lt;- mean(tumour_sizes)
+average_tumour_size</code></pre>
+<pre><code>[1] 29.386</code></pre>
+<blockquote>
+<p><strong><em>Exercise</em></strong></p>
+<p>Try computing some other summary statistics on the vector of tumour
+sizes using the functions, <code>sd()</code>, <code>var()</code>,
+<code>median()</code>, <code>IQR()</code>, <code>min()</code> and
+<code>max()</code>.</p>
+<p>Look up the Help page for these functions. Try running some of the
+example code snippets given in the <em>Examples</em> section in the help
+page.</p>
+</blockquote>
+<p>We can nest function calls, one within another,</p>
+<pre class="r"><code>average_tumour_size &lt;- round(mean(tumour_sizes), digits = 1)
+average_tumour_size</code></pre>
+<pre><code>[1] 29.4</code></pre>
+<p>but this can make for code that is difficult to read. Usually it is
+better to keep things simple even if you end up with code that is more
+verbose.</p>
+<pre class="r"><code>average_tumour_size &lt;- mean(tumour_sizes)
+average_tumour_size &lt;- round(average_tumour_size, digits = 1)
+average_tumour_size</code></pre>
+<pre><code>[1] 29.4</code></pre>
+</div>
+<div id="extracting-subsets-from-vectors" class="section level1">
+<h1>Extracting subsets from vectors</h1>
+<p>One of the operations we do frequently is to select subsets of our
+data that are of particular interest.</p>
+<p>To select one or more values from a vector we need to provide the
+index or indices within square brackets.</p>
+<pre class="r"><code>tumour_sizes[3]</code></pre>
+<pre><code>[1] 29.49</code></pre>
+<pre class="r"><code>tumour_sizes[c(1, 4, 5)]</code></pre>
+<pre><code>[1] 32.33 25.70 30.81</code></pre>
+<p>It is also quite common to extract a range of values using the
+<code>:</code> operator. The <code>:</code> operator creates a sequence
+of integer numbers.</p>
+<pre class="r"><code>2:4</code></pre>
+<pre><code>[1] 2 3 4</code></pre>
+<pre class="r"><code>tumour_sizes[2:4]</code></pre>
+<pre><code>[1] 28.60 29.49 25.70</code></pre>
+<div id="conditional-subsetting" class="section level2">
+<h2>Conditional subsetting</h2>
+<p>Another way of subsetting a vector is to use a logical vector.</p>
+<pre class="r"><code>selected &lt;- c(TRUE, FALSE, FALSE, TRUE, TRUE)
+tumour_sizes[selected]</code></pre>
+<pre><code>[1] 32.33 25.70 30.81</code></pre>
+<p>You may be thinking that this seems very abstract and questioning why
+it would ever be useful. But actually, it is probably the most commonly
+used way of selecting values of interest from a vector.</p>
+<p>Recall how we used the <code>&gt;</code> operator to create a logical
+vector corresponding to those tumours with a size greater than 30mm. We
+can use that to extract the sizes of those tumours.</p>
+<pre class="r"><code>tumours_larger_than_30mm &lt;- tumour_sizes &gt; 30
+tumour_sizes[tumours_larger_than_30mm]</code></pre>
+<pre><code>[1] 32.33 30.81</code></pre>
+<p>In practice, we wouldn’t really create a variable containing our
+logical vector signifying which values are of interest. Instead we’d do
+this in a single step.</p>
+<pre class="r"><code>tumour_sizes[tumour_sizes &gt; 30]</code></pre>
+<pre><code>[1] 32.33 30.81</code></pre>
+<p>Other logical operators include <code>==</code> (equal to),
+<code>!=</code> (not equal to), <code>&lt;</code> (less than),
+<code>&lt;=</code> (less than or equal to) and <code>&gt;=</code>
+(greater than or equal to).</p>
+<p>We can combine logical operations using <code>&amp;</code> and
+<code>|</code> operators which are the R versions of the AND and OR
+operations in Boolean algebra but which are applied to vectors.</p>
+<p>For example, we could obtain the sizes of tumours that are between
+27.5mm and 30mm.</p>
+<pre class="r"><code>tumours_of_interest &lt;- tumour_sizes &gt;= 27.5 &amp; tumour_sizes &lt;= 30
+tumour_sizes[tumours_of_interest]</code></pre>
+<pre><code>[1] 28.60 29.49</code></pre>
+<p>Or in a single command:</p>
+<pre class="r"><code>tumour_sizes[tumour_sizes &gt;= 27.5 &amp; tumour_sizes &lt;= 30]</code></pre>
+<pre><code>[1] 28.60 29.49</code></pre>
+</div>
+</div>
+<div id="modifying-vectors" class="section level1">
+<h1>Modifying vectors</h1>
+<p>We can add new values to a vector using the <code>c()</code>
+function.</p>
+<pre class="r"><code>tumour_sizes &lt;- c(tumour_sizes, 31.92, 24.11)
+tumour_sizes</code></pre>
+<pre><code>[1] 32.33 28.60 29.49 25.70 30.81 31.92 24.11</code></pre>
+<p>We can also combine two or more vectors in the same way.</p>
+<pre class="r"><code>more_tumour_sizes &lt;- c(26.34, 29.93)
+tumour_sizes &lt;- c(tumour_sizes, more_tumour_sizes)
+tumour_sizes</code></pre>
+<pre><code>[1] 32.33 28.60 29.49 25.70 30.81 31.92 24.11 26.34 29.93</code></pre>
+<p>One of more values in a vector can be changed using the same
+subsetting operations we used before but this time assigning new values
+to the subset.</p>
+<pre class="r"><code>tumour_sizes[3] &lt;- 33.67
+tumour_sizes</code></pre>
+<pre><code>[1] 32.33 28.60 33.67 25.70 30.81 31.92 24.11 26.34 29.93</code></pre>
+<pre class="r"><code>tumour_sizes[c(2, 6, 7)] &lt;- c(29.58, 25.55, 34.51)</code></pre>
+<pre class="r"><code>tumour_sizes[4:6] &lt;- c(31.83, 25.99, 27.24)</code></pre>
+</div>
+<div id="missing-values" class="section level1">
+<h1>Missing values</h1>
+<p>Missing values are quite common in scientific data and R has a way of
+handling these using the special value, <code>NA</code>, which stands
+for ‘not available’.</p>
+<p>The <code>airquality</code> example data set that comes with R
+contains missing values. This data set is a table of daily air quality
+measurements taken in New York and includes observations of ozone
+levels, wind speed and temperature. We’ll extract the ozone measurements
+from the table (Ozone column) as a vector.</p>
+<pre class="r"><code>ozone &lt;- airquality$Ozone
+ozone</code></pre>
+<pre><code>  [1]  41  36  12  18  NA  28  23  19   8  NA   7  16  11  14  18  14  34   6
+ [19]  30  11   1  11   4  32  NA  NA  NA  23  45 115  37  NA  NA  NA  NA  NA
+ [37]  NA  29  NA  71  39  NA  NA  23  NA  NA  21  37  20  12  13  NA  NA  NA
+ [55]  NA  NA  NA  NA  NA  NA  NA 135  49  32  NA  64  40  77  97  97  85  NA
+ [73]  10  27  NA   7  48  35  61  79  63  16  NA  NA  80 108  20  52  82  50
+ [91]  64  59  39   9  16  78  35  66 122  89 110  NA  NA  44  28  65  NA  22
+[109]  59  23  31  44  21   9  NA  45 168  73  NA  76 118  84  85  96  78  73
+[127]  91  47  32  20  23  21  24  44  21  28   9  13  46  18  13  24  16  13
+[145]  23  36   7  14  30  NA  14  18  20</code></pre>
+<p>We’ll be looking at tabular data in the next part of the course so
+don’t worry about the <code>$</code> operator we used here for now.</p>
+<p>Most functions will return <code>NA</code> if the data they work on
+contain missing values.</p>
+<pre class="r"><code>mean(ozone)</code></pre>
+<pre><code>[1] NA</code></pre>
+<p>The <code>mean()</code> function, and many like it, takes the view
+that it cannot compute the mean for a set of values where some are
+unknown. This is quite annoying but these functions usually have an
+argument named <code>na.rm</code> that can be set to <code>TRUE</code>
+to remove the <code>NA</code> values before doing the calculation.</p>
+<pre class="r"><code>mean(ozone, na.rm = TRUE)</code></pre>
+<pre><code>[1] 42.12931</code></pre>
+</div>
+<div id="the-very-useful-summary-function" class="section level1">
+<h1>The very useful <code>summary()</code> function</h1>
+<p>One very useful function is <code>summary()</code>. As the name
+suggests this produces a summary of the values it is given. It is really
+flexible and can take vectors of different types, tables and other data
+structures.</p>
+<pre class="r"><code>summary(ozone)</code></pre>
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+   1.00   18.00   31.50   42.13   63.25  168.00      37 </code></pre>
+<pre class="r"><code>summary(tumours_larger_than_30mm)</code></pre>
+<pre><code>   Mode   FALSE    TRUE 
+logical       3       2 </code></pre>
+<pre class="r"><code>summary(airquality)</code></pre>
+<pre><code>     Ozone           Solar.R           Wind             Temp      
+ Min.   :  1.00   Min.   :  7.0   Min.   : 1.700   Min.   :56.00  
+ 1st Qu.: 18.00   1st Qu.:115.8   1st Qu.: 7.400   1st Qu.:72.00  
+ Median : 31.50   Median :205.0   Median : 9.700   Median :79.00  
+ Mean   : 42.13   Mean   :185.9   Mean   : 9.958   Mean   :77.88  
+ 3rd Qu.: 63.25   3rd Qu.:258.8   3rd Qu.:11.500   3rd Qu.:85.00  
+ Max.   :168.00   Max.   :334.0   Max.   :20.700   Max.   :97.00  
+ NA&#39;s   :37       NA&#39;s   :7                                       
+     Month            Day      
+ Min.   :5.000   Min.   : 1.0  
+ 1st Qu.:6.000   1st Qu.: 8.0  
+ Median :7.000   Median :16.0  
+ Mean   :6.993   Mean   :15.8  
+ 3rd Qu.:8.000   3rd Qu.:23.0  
+ Max.   :9.000   Max.   :31.0  
+                               </code></pre>
+</div>
+<div id="scripting-in-r" class="section level1">
+<h1>Scripting in R</h1>
+<p>Up to now, we were mostly typing code in the Console pane at the
+<strong><code>&gt;</code></strong> prompt. This is a very interactive
+way of working with R but it is also important to be able to record the
+commands you’ve typed for when you come back to your analysis later.</p>
+<p>Instead we can create a script file containing our R commands; this
+is the way most R coding is done.</p>
+<p>From the RStudio ‘<strong>File</strong>’ menu, select ‘<strong>New
+File</strong>’ and then ‘<strong>R Script</strong>’.</p>
+<p><img src="images/rstudio_new_file_menu.png"
+style="width:50.0%" /></p>
+<p>You should now have a new file in its own tab, named ‘Untitled1’, at
+the top of the left-hand side of RStudio. The console window no longer
+occupies the whole of the left-hand side.</p>
+<p>We can type code into this file just as we have done at the command
+prompt in the Console tab pane. Save changes you make using the
+‘<strong>Save</strong>’ option from the ‘<strong>File</strong>’ menu.
+There is also a button or you can use a keyboard shortcut. On a Mac this
+is <kbd>cmd</kbd> + <kbd>S</kbd> (press the <kbd>cmd</kbd> key first
+and, while keeping this depressed, click the <kbd>S</kbd> key); on
+Windows it is <kbd>Ctrl</kbd> + <kbd>S</kbd>. RStudio will open a dialog
+box for you to enter the file name and loation the first time you try to
+save a new file. It is a good idea to regularly save changes to your
+script.</p>
+<p><img src="images/rstudio_script.png" style="width:100.0%" /></p>
+<div id="running-scripts" class="section level2">
+<h2>Running scripts</h2>
+<p>Having typed an R command and hit the return key you’ll notice that
+the command isn’t actually run like it was in the console window. That’s
+because you’re writing your R code in an editor. To run a single line of
+code within your script you can press the ‘<strong>Run</strong>’ button
+at the top of the script.</p>
+<p><img src="images/rstudio_run_button_highlighted.png"
+style="width:60.0%" /></p>
+<p>This will run the line of code on which the cursor is flashing or the
+next line of code if the cursor is on a blank or empty line.</p>
+<p>The keyboard shortcut is more convenient in practice as you won’t
+have to stop typing at the keyboard to use your mouse. This is
+<kbd>cmd</kbd> + <kbd>return</kbd> on a Mac and <kbd>Ctrl</kbd> +
+<kbd>enter</kbd> on Windows.</p>
+<p>Running a line in your script will automatically move the cursor onto
+the next command which can be very convenient as you’ll be able to run
+successive commands just by repeatedly clicking ‘<strong>Run</strong>’
+or using the keyboard shortcut.</p>
+<p>You can also run the entire script by clicking on the
+‘<strong>Source</strong>’ button, a little to the right of the
+‘<strong>Run</strong>’ button. More useful though is to run
+‘<strong>Source with Echo</strong>’ from the Source drop-down menu as
+this will also display your commands and the outputs from these in the
+Console window.</p>
+</div>
+<div id="adding-comments-to-your-code" class="section level2">
+<h2>Adding comments to your code</h2>
+<p>Anything that follows a <code>#</code> character within a line of
+code is ignored by R. This is useful as it allows you to add comments
+and explanations to your code.</p>
+<pre class="r"><code># extract tumour sizes that are greater than 30mm
+large_tumour_sizes &lt;- tumour_sizes[tumour_sizes &gt; 30]</code></pre>
+<p>Comments usually appear at the beginning of lines but can appear at
+the end of an R statement.</p>
+<pre class="r"><code>days &lt;- c(1, 2, 4, 6, 8, 12, 16) # didn&#39;t manage to get a measurement on day 10</code></pre>
+<p>It is also quite common when looking at R code to see lines of code
+commented out, usually replaced by another line that does something
+similar or makes a small change.</p>
+<pre class="r"><code># random_numbers &lt;- rnorm(100, mean = 0, sd = 1)
+random_numbers &lt;- rnorm(100, mean = 0, sd = 0.5)</code></pre>
+</div>
+</div>
 
 
 
