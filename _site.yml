@@ -8,6 +8,8 @@ navbar:
       href: introduction_to_r.html
     - text: "Tabular data"
       href: tabular_data.html
+    - text: "Next steps"
+      href: next_steps.html
   right:
     - icon: fa-github fa-lg
       href: https://github.com/bioinformatics-core-shared-training/r-basics

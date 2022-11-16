@@ -28,5 +28,7 @@ and analyze their data.
 
 2. [Introduction to R](introduction_to_r.html) - get acquainted with some key concepts with working in R
 
-3. [Working with tabular data](tabular_data.html) - a whistle-stop tour of some of the most common operations for manipulating and visualizing tabular data in R
+3. [Working with tabular data](tabular_data.html) - a whistle-stop tour of some of the most commonly used operations for manipulating and visualizing tabular data in R
+
+4. [Next steps](next_steps.html) - where to go next in our R learning journey
 
