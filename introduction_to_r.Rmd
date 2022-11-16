@@ -18,15 +18,15 @@ knitr::opts_chunk$set(comment = NA)
 # Using R as a calculator
 
 Open RStudio and type the following at the command prompt, **`>`** (in the console
-tab pane) to add two numbers together.
+tab pane), to add two numbers together.
 
 ```{r}
 4 + 3
 ```
 
-Now clearly 7 is the answer but what's the `[1]` that you see before it?
+Clearly the answer is 7 but what's the `[1]` that you see printed before it?
 
-Sometimes operations will return more than one value and these may get printed
+Sometimes operations will return more than one value and these may get written
 across several lines. Here's an example using one of the built-in datasets that
 contains the lengths of the major North American rivers.
 
@@ -121,8 +121,8 @@ average_tumour_size
 
 # Vectors and data types
 
-A vector is an ordered series of values and is the simplest data structure in R.
-The `rivers` data set is an example of a vector.
+A *vector* is an ordered series of values and is the simplest data structure in
+R. The `rivers` data set is an example of a vector.
 
 We can create a vector of our tumour sizes using the `c()` function.
 
@@ -131,8 +131,8 @@ tumour_sizes <- c(32.33, 28.6, 29.49, 25.7, 30.81)
 tumour_sizes
 ```
 
-We'll introduce functions in the next section but for now we'll note that
-`c` stands for *combine* and the `c()` function combines the values it is given
+We'll introduce functions in the next section but for now we note that `c`
+stands for 'combine' and the `c()` function combines the values it is given
 within the parentheses into a vector.
 
 Most operations in R are *'vectorized'*, i.e. they can work on vectors. For
@@ -167,6 +167,13 @@ Logical values are produced when using logical operators, e.g. the greater than
 operator `>`.
 
 ```{r}
+average_tumour_size_cm > 3
+```
+
+We can also do this on vectors to produce logical vectors, something we'll come
+back to shortly.
+
+```{r}
 tumours_larger_than_30mm <- tumour_sizes > 30
 tumours_larger_than_30mm
 ```
@@ -174,8 +181,13 @@ tumours_larger_than_30mm
 > **_Exercise_**
 > 
 > Try creating a vector that contains values with different types (numeric,
-> logical, character).
-> Try different combinations of types and see what happens.
+> logical, character)
+>
+> Try different combinations of types and see what happens, for example
+>
+> `c(FALSE, 2.5)`
+>
+> `c(FALSE, 2.5, "hello")`
 
 # Functions
 
@@ -205,15 +217,14 @@ round(average_tumour_size)
 ```
 
 By default the `round()` function rounds to the nearest whole number. We can
-specify the number of digits we want it to round to using the additional
-`digits` argument.
+specify the number of digits to round to using the additional `digits` argument.
 
 ```{r}
 round(average_tumour_size, digits = 2)
 ```
 
-We can find out more information about a function by looking at its help page
-by typing `?round` or `help(round)` at the command prompt.
+Information about a function can be found on its help page by typing `?round` or
+`help(round)` at the command prompt.
 
 ```{r eval = FALSE}
 ?round
@@ -244,13 +255,30 @@ the optional arguments you're specifying. It will make it much easier for
 someone reading your code and is less error-prone, particularly when using
 functions with many arguments.
 
-Many functions take vector arguments. For example to compute the mean tumour
-size we can pass our vector to the `mean()` function.
+Many functions take vector arguments. Some are *vectorized* and carry out the
+same operation on all the elements of the vector, e.g.
+
+```{r}
+log10(tumour_sizes)
+```
+
+Others compute a summary value from the given vector. For example, we can pass
+our vector of tumour sizes to the `mean()` function to compute the average value
+we calculated earlier.
 
 ```{r}
 average_tumour_size <- mean(tumour_sizes)
 average_tumour_size
 ```
+
+> **_Exercise_**
+> 
+> Try computing some other summary statistics on the vector of tumour sizes
+> using the functions, `sd()`, `var()`, `median()`, `IQR()`, `min()` and
+> `max()`.
+>
+> Look up the Help page for these functions. Try running some of the example
+> code snippets given in the *Examples* section in the help page.
 
 We can nest function calls, one within another,
 
@@ -303,7 +331,7 @@ tumour_sizes[selected]
 
 You may be thinking that this seems very abstract and questioning why it would
 ever be useful. But actually, it is probably the most commonly used way of
-selecting values of interest.
+selecting values of interest from a vector.
 
 Recall how we used the `>` operator to create a logical vector corresponding to
 those tumours with a size greater than 30mm. We can use that to extract the
@@ -328,7 +356,7 @@ We can combine logical operations using `&` and `|` operators which are the R
 versions of the AND and OR operations in Boolean algebra but which are applied
 to vectors.
 
-For example, we could obtain the sizes of tumours that are between 27.5 and
+For example, we could obtain the sizes of tumours that are between 27.5mm and
 30mm.
 
 ```{r}
@@ -378,7 +406,7 @@ tumour_sizes[4:6] <- c(31.83, 25.99, 27.24)
 # Missing values
 
 Missing values are quite common in scientific data and R has a way of handling
-these using the special value `NA`, which stands for 'not available'.
+these using the special value, `NA`, which stands for 'not available'.
 
 The `airquality` example data set that comes with R contains missing values.
 This data set is a table of daily air quality measurements taken in New York
@@ -389,6 +417,9 @@ extract the ozone measurements from the table (Ozone column) as a vector.
 ozone <- airquality$Ozone
 ozone
 ```
+
+We'll be looking at tabular data in the next part of the course so don't worry
+about the `$` operator we used here for now.
 
 Most functions will return `NA` if the data they work on contain missing values.
 
@@ -407,9 +438,9 @@ mean(ozone, na.rm = TRUE)
 
 # The very useful `summary()` function
 
-As an aside, a very useful function is `summary()`. As the name suggests this
-produces a summary of the values it is given. It is really flexible and can take
-vectors of different types, tables and other data structures.
+One very useful function is `summary()`. As the name suggests this produces a
+summary of the values it is given. It is really flexible and can take vectors of
+different types, tables and other data structures.
 
 ```{r}
 summary(ozone)
@@ -426,10 +457,11 @@ summary(airquality)
 # Scripting in R
 
 Up to now, we were mostly typing code in the Console pane at the **`>`** prompt.
-This is a very interactive way of working with R but it is useful to be record
-the commands you've typed when you come back to it later.
+This is a very interactive way of working with R but it is also important to be
+able to record the commands you've typed for when you come back to your analysis
+later.
 
-Instead we can create a script file containing our R command; this is the way
+Instead we can create a script file containing our R commands; this is the way
 most R coding is done.
 
 From the RStudio '**File**' menu, select '**New File**' and then '**R Script**'.
