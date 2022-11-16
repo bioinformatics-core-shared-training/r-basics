@@ -24,10 +24,11 @@ tab pane) to add two numbers together.
 4 + 3
 ```
 
-Now clearly 7 is the answer but what's the `[1]` that you see before it? Well,
-sometimes operations will return more than one value and R may have to print
-these across several lines. Here's an example using one of the built-in datasets
-that contains the lengths of the major North American rivers.
+Now clearly 7 is the answer but what's the `[1]` that you see before it?
+
+Sometimes operations will return more than one value and these may get printed
+across several lines. Here's an example using one of the built-in datasets that
+contains the lengths of the major North American rivers.
 
 ```{r}
 rivers
@@ -45,7 +46,7 @@ first element printed on that line is the eleventh element within the list.
 >
 > The operator for multiplication is `*` and for division it is `/`.
 
-Now let's add several numbers together.
+Let's add several numbers together.
 
 ```{r}
 32.33 + 28.6 + 29.49 + 25.7 + 30.81
@@ -88,7 +89,7 @@ Our new object is listed in the Environment tab in the top right panel in
 RStudio.
 
 ![](images/object_assignment.png){width=100%}
-Sometimes objects are referred to as *variables*, a term commonly used in other
+Objects are commonly referred to as *variables*, a term commonly used in other
 programming languages.
 
 We can now use our object in further calculations. For example, if our tumour
@@ -120,8 +121,8 @@ average_tumour_size
 
 # Vectors and data types
 
-A vector is a series of values. It is the simplest data structure in R. The
-`rivers` data set is an example of a vector.
+A vector is an ordered series of values and is the simplest data structure in R.
+The `rivers` data set is an example of a vector.
 
 We can create a vector of our tumour sizes using the `c()` function.
 
@@ -179,11 +180,11 @@ tumours_larger_than_30mm
 # Functions
 
 R contains a large set of functions that do many useful operations. Let's have a
-look at a simple example, the `sqrt()` function that calculates the square root
-of a number.
+look at a simple example, the `log2()` function that calculates the base 2
+logarithm of a number.
 
 ```{r}
-sqrt(15)
+log2(4)
 ```
 
 A function usually takes one or more inputs known as *arguments*. Functions
@@ -191,12 +192,12 @@ often, but not always, return a value, which in turn can be assigned to an
 object.
 
 ```{r}
-a <- 100
-b <- sqrt(a)
+a <- 10.25
+b <- log2(a)
 b
 ```
 
-The `sqrt()` function only takes a single argument. Let's try a function that
+The `log2()` function only takes a single argument. Let's try a function that
 can take multiple arguments: `round()`
 
 ```{r}
@@ -300,9 +301,9 @@ selected <- c(TRUE, FALSE, FALSE, TRUE, TRUE)
 tumour_sizes[selected]
 ```
 
-You may be thinking that this seems very abstract and why on earth would it ever
-be useful. But actually, it is probably the most commonly used way of selecting
-values of interest.
+You may be thinking that this seems very abstract and questioning why it would
+ever be useful. But actually, it is probably the most commonly used way of
+selecting values of interest.
 
 Recall how we used the `>` operator to create a logical vector corresponding to
 those tumours with a size greater than 30mm. We can use that to extract the
@@ -358,7 +359,7 @@ tumour_sizes <- c(tumour_sizes, more_tumour_sizes)
 tumour_sizes
 ```
 
-We can change one or more values in a vector using the same subsetting
+One of more values in a vector can be changed using the same subsetting
 operations we used before but this time assigning new values to the subset.
 
 ```{r}
@@ -376,8 +377,8 @@ tumour_sizes[4:6] <- c(31.83, 25.99, 27.24)
 
 # Missing values
 
-Missing values are quite common in scientific research data and R has a way of
-handling these using the special value `NA`, which stands for 'not available'.
+Missing values are quite common in scientific data and R has a way of handling
+these using the special value `NA`, which stands for 'not available'.
 
 The `airquality` example data set that comes with R contains missing values.
 This data set is a table of daily air quality measurements taken in New York
