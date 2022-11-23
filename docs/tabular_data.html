@@ -358,7 +358,438 @@ div.tocify {
 </div>
 
 
-<p>In preparation - coming soon</p>
+<blockquote>
+<h4 id="objectives">Objectives</h4>
+<ul>
+<li>Read tabular data into R from a CSV file</li>
+<li></li>
+</ul>
+</blockquote>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In this session we’ll introduce some of the most commonly used
+operations for interacting with and visualizing tabular data. The
+functions we will look at are from a collection of packages known as the
+<strong>tidyverse</strong>. This will be something of a whistle-stop
+tour with the aim of giving you an appreciation of what you can do with
+R and hopefully inspiring you to start on a journey towards learning and
+using R in your research.</p>
+</div>
+<div id="tabular-data" class="section level1">
+<h1>Tabular data</h1>
+<p>Much of the data we work with are in tabular format and R has a data
+structure, known as a <strong>data.frame</strong>, for handling this
+type of data. Let’s look at an example using one of R’s built-in data
+sets.</p>
+<p>Open RStudio and type “<code>iris</code>” at the command prompt and
+hit the return key. You will see the table of measurements of petal and
+sepal dimensions for various iris plants displayed as a table.</p>
+<p>Writing our commands in a script file will make this session much
+easier as we’re going to build mini workflows, incrementally adding
+additional operations as we go along. Create a new R script file by
+selecting <strong>R Script</strong> from the <strong>File</strong> menu
+and <strong>New File</strong> sub-menu. Save the script on your computer
+using using the ‘<strong>Save</strong>’ option from the
+‘<strong>File</strong>’ menu.</p>
+<p>Type “<code>iris</code>” in the script file and run the command by
+clicking on the <strong>Run</strong> button in the toolbar just above
+the script or by pressing <kbd>cmd</kbd> + <kbd>S</kbd> on MacOS or
+<kbd>Ctrl</kbd> + <kbd>S</kbd> on Windows.</p>
+<p>With long tables it is often more useful just to print the first few
+lines.</p>
+<pre class="r"><code>head(iris)</code></pre>
+<pre><code>  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+4          4.6         3.1          1.5         0.2  setosa
+5          5.0         3.6          1.4         0.2  setosa
+6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<p>The <strong><code>nrow()</code></strong> and
+<strong><code>ncol()</code></strong> functions return the number or rows
+and columns of the table.</p>
+<pre class="r"><code>nrow(iris)</code></pre>
+<pre><code>[1] 150</code></pre>
+<pre class="r"><code>ncol(iris)</code></pre>
+<pre><code>[1] 5</code></pre>
+<div id="tidyverse-tables-tibbles" class="section level2">
+<h2>Tidyverse tables (tibbles)</h2>
+<p>The <strong>tidyverse</strong> provides a special kind of data frame
+known as a <strong>tibble</strong> which has some additional behaviour
+over and above what you get with a regular data frame. One of those
+additional features is the way it is printed.</p>
+<p>We need to load the tidyverse to make its functions available to
+us.</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+✔ tibble  3.1.7     ✔ dplyr   1.0.9
+✔ tidyr   1.2.0     ✔ stringr 1.4.0
+✔ readr   2.1.2     ✔ forcats 0.5.1</code></pre>
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+<p>Several packages get loaded; we’ll be using functions from many of
+these.</p>
+<p>The tidyverse also comes with some built-in data sets that are mainly
+used to demonstrate how functions work in example code given in the help
+documentation. One of these is the <code>mpg</code> data set containing
+fuel economy data for popular models of cars.</p>
+<pre class="r"><code>mpg</code></pre>
+<pre><code># A tibble: 234 × 11
+   manufacturer model      displ  year   cyl trans drv     cty   hwy fl    class
+   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 audi         a4           1.8  1999     4 auto… f        18    29 p     comp…
+ 2 audi         a4           1.8  1999     4 manu… f        21    29 p     comp…
+ 3 audi         a4           2    2008     4 manu… f        20    31 p     comp…
+ 4 audi         a4           2    2008     4 auto… f        21    30 p     comp…
+ 5 audi         a4           2.8  1999     6 auto… f        16    26 p     comp…
+ 6 audi         a4           2.8  1999     6 manu… f        18    26 p     comp…
+ 7 audi         a4           3.1  2008     6 auto… f        18    27 p     comp…
+ 8 audi         a4 quattro   1.8  1999     4 manu… 4        18    26 p     comp…
+ 9 audi         a4 quattro   1.8  1999     4 auto… 4        16    25 p     comp…
+10 audi         a4 quattro   2    2008     4 manu… 4        20    28 p     comp…
+# … with 224 more rows</code></pre>
+<p>Only the first 10 rows are printed and only as many columns as can
+fit across the width of the page. The dimensions of the table (number of
+rows and columns) are also displayed as well as the types of each
+column. <code>&lt;chr&gt;</code> stands for character,
+<code>&lt;dbl&gt;</code> for double (floating-point numbers) and
+<code>&lt;int&gt;</code> for integer.</p>
+<p>The help page accessed using <code>?mpg</code> contains more
+information about this data set.</p>
+</div>
+<div id="data.frame-structure" class="section level2">
+<h2>Data.frame structure</h2>
+<p>A data frame or table in R is an ordered set of vectors, all of which
+have the same length.</p>
+<p>The values of a column can be extracted as a vector using the
+<strong><code>$</code></strong> operator.</p>
+<pre class="r"><code>city_mpg &lt;- mpg$cty
+length(city_mpg)</code></pre>
+<pre><code>[1] 234</code></pre>
+<pre class="r"><code>city_mpg[1:50]</code></pre>
+<pre><code> [1] 18 21 20 21 16 18 18 18 16 20 19 15 17 17 15 15 17 16 14 11 14 13 12 16 15
+[26] 16 15 15 14 11 11 14 19 22 18 18 17 18 17 16 16 17 17 11 15 15 16 16 15 14</code></pre>
+<pre class="r"><code>mean(mpg$cty)</code></pre>
+<pre><code>[1] 16.85897</code></pre>
+</div>
+</div>
+<div id="nalcn-current-response-data-set" class="section level1">
+<h1>NALCN current response data set</h1>
+<p>In what follows we’ll be using a data set generated in the Cancer
+Research UK Cambridge Institute.</p>
+<p><em>The NALCN channel regulates metastasis and nonmalignant cell
+dissemination.</em> <a
+href="http://doi.org/10.1038/s41588-022-01182-0">Rahrmann <em>et
+al.</em>, Nature Genetics 2022</a></p>
+<p>We’ll start by looking at the source data for figure 2b which can be
+downloaded from the publication by following the ‘Source data’ link at
+the bottom of the figure caption.</p>
+<p>Note that file is actually in the newer Excel xlsx format but has the
+wrong suffix (xls) so Excel and R may refuse to open it. Rename the file
+so it has the xlsx suffix.</p>
+</div>
+<div id="reading-a-csv-file" class="section level1">
+<h1>Reading a CSV file</h1>
+<p>The data for figures 2a and 2b (sheet FIG.2a_b) are not in a very
+suitable format for computational analysis (appears to be more for human
+readability) so we’ll use a reformatted version available as a CSV file
+<a
+href="https://github.com/bioinformatics-core-shared-training/r-basics/raw/main/data/current_responses.csv">here</a>.</p>
+<p>Download the CSV file and save or move it to the directory in which
+you are running your R session or that in which you saved your R script.
+You can find out which directory you are working in using the
+<strong><code>getwd()</code></strong> function. If you saved your R
+script file to a different location you can change the working directory
+to the directory in which the script is located by using the
+<strong>Sesssion &gt; Set Working Directory &gt; To Source File
+Location</strong> menu item.</p>
+<div id="read_csv" class="section level2">
+<h2><strong><em><code>read_csv()</code></em></strong></h2>
+<p>We’ll use the <strong><code>read_csv()</code></strong> function from
+the <strong><code>readr</code></strong> package (one of the packages
+that was loaded when we ran <code>library(tidyverse)</code>) to read the
+contents of this CSV file into R.</p>
+<pre class="r"><code>current_responses &lt;- read_csv(&quot;current_responses.csv&quot;)</code></pre>
+<pre><code>Rows: 135 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (2): id, group
+dbl (2): voltage, current
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>current_responses</code></pre>
+<pre><code># A tibble: 135 × 4
+   id       group       voltage current
+   &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+ 1 061412c2 Control         -80 -14.0  
+ 2 061412c1 Control         -80 -27.1  
+ 3 052512n3 Control         -80  -8.65 
+ 4 060512n2 Control         -80  -8.62 
+ 5 050212c1 Control         -80 -28.8  
+ 6 051712n1 Nalcn_shRNA     -80  -1.64 
+ 7 061312c2 Nalcn_shRNA     -80  -9.33 
+ 8 061312c1 Nalcn_shRNA     -80   2.95 
+ 9 061212c1 Nalcn_shRNA     -80  -0.682
+10 050312c1 Nalcn_shRNA     -80  -4.17 
+# … with 125 more rows</code></pre>
+<p>These data are from a voltage-clamp experiment in which current
+density was measured for the NALCN ion channel in
+<em>P1<sup>KP</sup></em>-GAC cells for voltage steps in the ±80mV
+range.</p>
+<p>To test whether <em>Nalcn</em> regulates cancer progression, it
+function was altered using Nalcn-short hairpin RNA and
+NALCN-complementary DNA lentiviral transduction. This data set contains
+measurements for 5 replicates each of the
+<em>Nalcn<sup>shRNA</sup></em>, <em>NALCN<sup>cDNA</sup></em> and
+control groups.</p>
+<pre class="r"><code>summary(current_responses)</code></pre>
+<pre><code>      id               group              voltage       current         
+ Length:135         Length:135         Min.   :-80   Min.   :-77.02221  
+ Class :character   Class :character   1st Qu.:-40   1st Qu.: -4.29843  
+ Mode  :character   Mode  :character   Median :  0   Median : -0.03289  
+                                       Mean   :  0   Mean   :  1.28719  
+                                       3rd Qu.: 40   3rd Qu.:  6.43318  
+                                       Max.   : 80   Max.   : 61.43382  </code></pre>
+<pre class="r"><code>mean(current_responses$current)</code></pre>
+<pre><code>[1] 1.287191</code></pre>
+</div>
+</div>
+<div id="slicing-and-dicing" class="section level1">
+<h1>Slicing and dicing</h1>
+<div id="filter" class="section level2">
+<h2><strong><code>filter()</code></strong></h2>
+<p>We’ll filter our table so it just contains the rows for control
+samples.</p>
+<pre class="r"><code>control_responses &lt;- filter(current_responses, group == &quot;Control&quot;)
+control_responses</code></pre>
+<pre><code># A tibble: 45 × 4
+   id       group   voltage current
+   &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+ 1 061412c2 Control     -80  -14.0 
+ 2 061412c1 Control     -80  -27.1 
+ 3 052512n3 Control     -80   -8.65
+ 4 060512n2 Control     -80   -8.62
+ 5 050212c1 Control     -80  -28.8 
+ 6 061412c2 Control     -60  -10.2 
+ 7 061412c1 Control     -60  -22.3 
+ 8 052512n3 Control     -60   -5.18
+ 9 060512n2 Control     -60   -5.29
+10 050212c1 Control     -60  -21.1 
+# … with 35 more rows</code></pre>
+<p>We can add further conditions, so for example to obtain the subset of
+current measurements for control samples at a voltage of -80mV:</p>
+<pre class="r"><code>control_minus_80_responses &lt;- filter(current_responses, group == &quot;Control&quot;, voltage == -80)
+control_minus_80_responses</code></pre>
+<pre><code># A tibble: 5 × 4
+  id       group   voltage current
+  &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 061412c2 Control     -80  -14.0 
+2 061412c1 Control     -80  -27.1 
+3 052512n3 Control     -80   -8.65
+4 060512n2 Control     -80   -8.62
+5 050212c1 Control     -80  -28.8 </code></pre>
+<pre class="r"><code>mean(control_minus_80_responses$current)</code></pre>
+<pre><code>[1] -17.43598</code></pre>
+</div>
+<div id="select" class="section level2">
+<h2><strong><em><code>select()</code></em></strong></h2>
+<p>You can also select a subset of columns you’re interested in.</p>
+<pre class="r"><code>control_minus_80_responses &lt;- select(control_responses, id, voltage, current)
+control_minus_80_responses</code></pre>
+<pre><code># A tibble: 45 × 3
+   id       voltage current
+   &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+ 1 061412c2     -80  -14.0 
+ 2 061412c1     -80  -27.1 
+ 3 052512n3     -80   -8.65
+ 4 060512n2     -80   -8.62
+ 5 050212c1     -80  -28.8 
+ 6 061412c2     -60  -10.2 
+ 7 061412c1     -60  -22.3 
+ 8 052512n3     -60   -5.18
+ 9 060512n2     -60   -5.29
+10 050212c1     -60  -21.1 
+# … with 35 more rows</code></pre>
+<p>You can also specify the columns you’re not interested in and want to
+exclude using the <strong><code>!</code></strong> operator.</p>
+<pre class="r"><code>control_minus_80_responses &lt;- filter(current_responses, group == &quot;Control&quot;, voltage == -80)
+control_minus_80_responses &lt;- select(control_responses, !group)</code></pre>
+</div>
+</div>
+<div id="chaining-operations-using" class="section level1">
+<h1>Chaining operations using <strong><code>%&gt;%</code></strong></h1>
+<p>Typically a series of operations will be performed on a data set and
+assigning the result of each to an intermediate object can get quite
+cumbersome and result in code that is not so easy to read.</p>
+<p>The pipe operator, <strong><code>%&gt;%</code></strong>, can be used
+to join two or more operations. It takes the output from one operation
+(the one that comes before it) and passes it as the first argument to
+the next function (the one that comes after).</p>
+<p><strong><code>x %&gt;% f(y)</code></strong> is equivalent to
+<strong><code>f(x, y)</code></strong></p>
+<p>We’ll try this out to rewrite the <code>filter()</code> and
+<code>select()</code> operations in the previous code snippet.</p>
+<pre class="r"><code>filter(current_responses, group == &quot;Control&quot;, voltage == -80) %&gt;% select(!group)</code></pre>
+<pre><code># A tibble: 5 × 3
+  id       voltage current
+  &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+1 061412c2     -80  -14.0 
+2 061412c1     -80  -27.1 
+3 052512n3     -80   -8.65
+4 060512n2     -80   -8.62
+5 050212c1     -80  -28.8 </code></pre>
+<p>It is more readable to spread this over multiple lines of code.</p>
+<pre class="r"><code>current_responses %&gt;%
+  filter(group == &quot;Control&quot;, voltage == -80) %&gt;%
+  select(!group)</code></pre>
+<pre><code># A tibble: 5 × 3
+  id       voltage current
+  &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+1 061412c2     -80  -14.0 
+2 061412c1     -80  -27.1 
+3 052512n3     -80   -8.65
+4 060512n2     -80   -8.62
+5 050212c1     -80  -28.8 </code></pre>
+<p>We can assign the result to an object in the usual way.</p>
+<pre class="r"><code>control_minus_80_responses &lt;- current_responses %&gt;%
+  filter(group == &quot;Control&quot;, voltage == -80) %&gt;%
+  select(!group)</code></pre>
+</div>
+<div id="summarizing-tabular-data" class="section level1">
+<h1>Summarizing tabular data</h1>
+<p>The <code>summary()</code> function we looked at in the introduction
+section can work on tables producing a summary for each.</p>
+<pre class="r"><code>summary(control_minus_80_responses)</code></pre>
+<pre><code>      id               voltage       current       
+ Length:5           Min.   :-80   Min.   :-28.809  
+ Class :character   1st Qu.:-80   1st Qu.:-27.050  
+ Mode  :character   Median :-80   Median :-14.050  
+                    Mean   :-80   Mean   :-17.436  
+                    3rd Qu.:-80   3rd Qu.: -8.651  
+                    Max.   :-80   Max.   : -8.619  </code></pre>
+<div id="summarize" class="section level2">
+<h2><strong><code>summarize()</code></strong></h2>
+<p>The tidyverse has its own summarization function.</p>
+<pre class="r"><code>summarize(control_minus_80_responses, mean_current = mean(current))</code></pre>
+<pre><code># A tibble: 1 × 1
+  mean_current
+         &lt;dbl&gt;
+1        -17.4</code></pre>
+<p>Unlike computing the mean value directly on the current column as we
+did before (<code>mean(control_minus_80_responses$current)</code>),
+<code>summarize()</code> returns another table. This only becomes useful
+when we’re summarizing more than one thing at once.</p>
+<pre class="r"><code>summarize(control_minus_80_responses, Current = mean(current), SD = sd(current), N = n())</code></pre>
+<pre><code># A tibble: 1 × 3
+  Current    SD     N
+    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1   -17.4  9.85     5</code></pre>
+</div>
+<div id="group_by" class="section level2">
+<h2><strong><code>group_by()</code></strong></h2>
+<p>Usually, you’ll want to calculate averages, etc., within groups. We
+can do this using the <strong><code>group_by()</code></strong>
+function.</p>
+<p>For example, we can compute the mean current for each of the
+different voltages in our control samples.</p>
+<pre class="r"><code>control_responses %&gt;%
+  group_by(voltage) %&gt;%
+  summarize(Current = mean(current), SD = sd(current), N = n())</code></pre>
+<pre><code># A tibble: 9 × 4
+  voltage  Current    SD     N
+    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1     -80 -17.4    9.85      5
+2     -60 -12.8    8.35      5
+3     -40  -8.64   6.24      5
+4     -20  -5.22   4.63      5
+5       0  -0.0117 0.804     5
+6      20   4.46   3.90      5
+7      40   9.61   4.74      5
+8      60  16.1    8.21      5
+9      80  22.7    8.72      5</code></pre>
+<p>And we can group by more than one variable, so returning to our
+original, unfiltered table:</p>
+<pre class="r"><code>summary &lt;- current_responses %&gt;%
+  group_by(group, voltage) %&gt;%
+  summarize(Current = mean(current), SD = sd(current), N = n())</code></pre>
+<pre><code>`summarise()` has grouped output by &#39;group&#39;. You can override using the
+`.groups` argument.</code></pre>
+<pre class="r"><code>summary</code></pre>
+<pre><code># A tibble: 27 × 5
+# Groups:   group [3]
+   group      voltage  Current     SD     N
+   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;
+ 1 Control        -80 -17.4     9.85      5
+ 2 Control        -60 -12.8     8.35      5
+ 3 Control        -40  -8.64    6.24      5
+ 4 Control        -20  -5.22    4.63      5
+ 5 Control          0  -0.0117  0.804     5
+ 6 Control         20   4.46    3.90      5
+ 7 Control         40   9.61    4.74      5
+ 8 Control         60  16.1     8.21      5
+ 9 Control         80  22.7     8.72      5
+10 NALCN_cDNA     -80 -24.0    30.2       5
+# … with 17 more rows</code></pre>
+</div>
+</div>
+<div id="modifying-a-table" class="section level1">
+<h1>Modifying a table</h1>
+<p>The source data contains values for the mean current density and also
+the standard error. We’ve calculated the standard deviation and so we
+can calculate the standard error by dividing through by the square root
+of the number of values, or replicates in our case.</p>
+<div id="mutate" class="section level2">
+<h2><strong><code>mutate()</code></strong></h2>
+<p>The <strong><code>mutate()</code></strong> lets us add new variables
+(columns) to a table or modify existing ones.</p>
+<pre class="r"><code>mutate(summary, SE = SD /sqrt(N))  </code></pre>
+<pre><code># A tibble: 27 × 6
+# Groups:   group [3]
+   group      voltage  Current     SD     N     SE
+   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;
+ 1 Control        -80 -17.4     9.85      5  4.41 
+ 2 Control        -60 -12.8     8.35      5  3.73 
+ 3 Control        -40  -8.64    6.24      5  2.79 
+ 4 Control        -20  -5.22    4.63      5  2.07 
+ 5 Control          0  -0.0117  0.804     5  0.360
+ 6 Control         20   4.46    3.90      5  1.74 
+ 7 Control         40   9.61    4.74      5  2.12 
+ 8 Control         60  16.1     8.21      5  3.67 
+ 9 Control         80  22.7     8.72      5  3.90 
+10 NALCN_cDNA     -80 -24.0    30.2       5 13.5  
+# … with 17 more rows</code></pre>
+</div>
+<div id="rename" class="section level2">
+<h2><strong><code>rename()</code></strong></h2>
+<p>We’ll put it all together in a single workflow and use the
+<strong><code>rename()</code></strong> function to rename a couple of
+columns so the result has consistent column naming (capitilization).</p>
+<pre class="r"><code>summary &lt;- current_responses %&gt;%
+  group_by(group, voltage) %&gt;%
+  summarize(Current = mean(current), N = n(), SD = sd(current), .groups = &quot;drop&quot;) %&gt;%
+  mutate(SE = SD /sqrt(N)) %&gt;%
+  rename(Group = group, Voltage = voltage) %&gt;%
+  select(-SD)
+summary</code></pre>
+<pre><code># A tibble: 27 × 5
+   Group      Voltage  Current     N     SE
+   &lt;chr&gt;        &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;
+ 1 Control        -80 -17.4        5  4.41 
+ 2 Control        -60 -12.8        5  3.73 
+ 3 Control        -40  -8.64       5  2.79 
+ 4 Control        -20  -5.22       5  2.07 
+ 5 Control          0  -0.0117     5  0.360
+ 6 Control         20   4.46       5  1.74 
+ 7 Control         40   9.61       5  2.12 
+ 8 Control         60  16.1        5  3.67 
+ 9 Control         80  22.7        5  3.90 
+10 NALCN_cDNA     -80 -24.0        5 13.5  
+# … with 17 more rows</code></pre>
+</div>
+</div>
 
 
 
