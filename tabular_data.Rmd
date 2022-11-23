@@ -5,7 +5,12 @@ title: 'Working with tabular data in R'
 > #### Objectives
 >
 > * Read tabular data into R from a CSV file
-> * 
+> * Filter rows based on conditions and values in columns
+> * Select columns of interest or exclude columns that aren't of interest
+> * Summarize the values in one or more columns
+> * Group data based on one or more categorical variables and create summaries within groups
+> * Add new columns to tables derived from the values in other columns
+> * Learn about the grammar of graphics used to create plots using the popular **ggplot2** package
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(comment = NA)
@@ -15,10 +20,11 @@ knitr::opts_chunk$set(comment = NA)
 
 In this session we'll introduce some of the most commonly used operations for
 interacting with and visualizing tabular data. The functions we will look at are
-from a collection of packages known as the **tidyverse**. This will be something
-of a whistle-stop tour with the aim of giving you an appreciation of what you
-can do with R and hopefully inspiring you to start on a journey towards learning
-and using R in your research.
+from a collection of packages known as the **tidyverse**.
+
+This will be something of a whistle-stop tour with the aim of giving you an
+appreciation of what you can do with R and hopefully inspiring you to start on a
+journey towards using R for effective analysis of data in your research.
 
 # Tabular data
 
@@ -27,24 +33,25 @@ known as a **data.frame**, for handling this type of data. Let's look at an
 example using one of R's built-in data sets.
 
 Open RStudio and type "`iris`" at the command prompt and hit the return key. You
-will see the table of measurements of petal and sepal dimensions for various
-iris plants displayed as a table.
+will see a set of measurements of petal and sepal dimensions for various iris
+plants displayed as a table.
 
-Writing our commands in a script file will make this session much easier as
-we're going to build mini workflows, incrementally adding additional operations
-as we go along. Create a new R script file by selecting **R Script** from the
-**File** menu and **New File** sub-menu. Save the script on your computer using
-using the '**Save**' option from the '**File**' menu.
+Writing our commands in a script file will make things much easier as we're
+going to build chains of operations, incrementally adding additional operations
+as we go along. Create a new R script file by selecting the **File > New File >
+R Script** menu item. Save the script on your computer using using the
+'**Save**' option from the '**File**' menu.
 
 Type "`iris`" in the script file and run the command by clicking on the **Run**
-button in the toolbar just above the script or by pressing <kbd>cmd</kbd> +
+button in the toolbar located above the script or by pressing <kbd>cmd</kbd> +
 <kbd>S</kbd> on MacOS or <kbd>Ctrl</kbd> + <kbd>S</kbd> on Windows.
 
-With long tables it is often more useful just to print the first few lines.
+With large tables it is often more useful just to print the first few lines.
 
 ```{r}
 head(iris)
 ```
+
 The **`nrow()`** and **`ncol()`** functions return the number or rows and
 columns of the table.
 
@@ -57,19 +64,19 @@ ncol(iris)
 
 The **tidyverse** provides a special kind of data frame known as a **tibble**
 which has some additional behaviour over and above what you get with a regular
-data frame. One of those additional features is the way it is printed.
+data frame. One of those additional features is the way a tibble is printed.
 
-We need to load the tidyverse to make its functions available to us.
+We need to load the tidyverse to make use of its functions.
 
 ```{r}
 library(tidyverse)
 ```
 
-Several packages get loaded; we'll be using functions from many of these.
+Several packages get loaded - we'll be using functions from most of these.
 
 The tidyverse also comes with some built-in data sets that are mainly used to
 demonstrate how functions work in example code given in the help documentation.
-One of these is the `mpg` data set containing fuel economy data for popular
+One of these is the `mpg` data set containing fuel economy data for different
 models of cars.
 
 ```{r}
@@ -79,9 +86,9 @@ mpg
 Only the first 10 rows are printed and only as many columns as can fit across
 the width of the page. The dimensions of the table (number of rows and columns)
 are also displayed as well as the types of each column. `<chr>` stands for
-character, `<dbl>` for double (floating-point numbers) and `<int>` for integer.
+character, `<dbl>` for double (floating-point number) and `<int>` for integer.
 
-The help page accessed using `?mpg` contains more information about this data
+The help page, accessed using `?mpg`, contains more information about this data
 set.
 
 ## Data.frame structure
@@ -93,7 +100,16 @@ The values of a column can be extracted as a vector using the **`$`** operator.
 
 ```{r}
 city_mpg <- mpg$cty
+```
+
+Having extracted the miles per gallon values for city driving as a vector, we
+can use it as we would any other vector.
+
+```{r}
 length(city_mpg)
+```
+
+```{r}
 city_mpg[1:50]
 ```
 
@@ -101,28 +117,27 @@ city_mpg[1:50]
 mean(mpg$cty)
 ```
 
-
 # NALCN current response data set
 
 In what follows we'll be using a data set generated in the Cancer Research UK
-Cambridge Institute.
+Cambridge Institute and published in the following paper.
 
 _The NALCN channel regulates metastasis and nonmalignant cell dissemination._
 [Rahrmann _et al._, Nature Genetics 2022](http://doi.org/10.1038/s41588-022-01182-0)
 
-We'll start by looking at the source data for figure 2b which can be downloaded
-from the publication by following the 'Source data' link at the bottom of the
-figure caption.
+We'll start by looking at the source data for figure 2b in this paper which can
+be downloaded from the journal website by following the 'Source data' link at
+the bottom of the figure caption.
 
-Note that file is actually in the newer Excel xlsx format but has the wrong
-suffix (xls) so Excel and R may refuse to open it. Rename the file so it has the
-xlsx suffix.
+Note that this Excel spreadsheet is actually in the newer xlsx format but has
+the wrong suffix (xls) so Excel and R may refuse to open it. Rename the file so
+it has the xlsx suffix.
 
 # Reading a CSV file
 
 The data for figures 2a and 2b (sheet FIG.2a_b) are not in a very suitable
-format for computational analysis (appears to be more for human readability)
-so we'll use a reformatted version available as a CSV file
+format for computational analysis (appear to be structured more for human
+readability) so we'll use a reformatted version available as a CSV file
 [here](data/current_responses.csv).
 
 Download the CSV file and save or move it to the directory in which you are
@@ -132,7 +147,7 @@ saved your R script file to a different location you can change the working
 directory to the directory in which the script is located by using the
 **Sesssion > Set Working Directory > To Source File Location** menu item.
 
-## **_`read_csv()`_**
+## **`read_csv()`**
 
 We'll use the **`read_csv()`** function from the **`readr`** package (one of the
 packages that was loaded when we ran `library(tidyverse)`) to read the contents
@@ -151,11 +166,11 @@ current_responses
 ```
 
 These data are from a voltage-clamp experiment in which current density was
-measured for the NALCN ion channel in _P1^KP^_-GAC cells for voltage steps in
-the &pm;80mV range.
+measured for the NALCN ion channel in _P1^KP^_-GAC cells for various voltage
+steps in the &pm;80mV range.
 
-To test whether _Nalcn_ regulates cancer progression, it function was altered
-using Nalcn-short hairpin RNA and NALCN-complementary DNA lentiviral
+To test whether _Nalcn_ regulates cancer progression, its function was altered
+using both Nalcn-short hairpin RNA and NALCN-complementary DNA lentiviral
 transduction. This data set contains measurements for 5 replicates each of the
 _Nalcn^shRNA^_, _NALCN^cDNA^_ and control groups.
 
@@ -168,14 +183,14 @@ mean(current_responses$current)
 
 ## **`filter()`**
 
-We'll filter our table so it just contains the rows for control samples.
+We'll filter our table so it just contains rows for the control samples.
 
 ```{r}
 control_responses <- filter(current_responses, group == "Control")
 control_responses
 ```
 
-We can add further conditions, so for example to obtain the subset of current
+We can add further conditions, so, for example, to obtain the subset of current
 measurements for control samples at a voltage of -80mV:
 
 ```{r}
@@ -187,17 +202,18 @@ control_minus_80_responses
 mean(control_minus_80_responses$current)
 ```
 
-## **_`select()`_**
+## **`select()`**
 
-You can also select a subset of columns you're interested in.
+As well as subsetting our table based on the contents of various columns, we
+can also select a subset of columns that we're interested in.
 
 ```{r}
 control_minus_80_responses <- select(control_responses, id, voltage, current)
 control_minus_80_responses
 ```
 
-You can also specify the columns you're not interested in and want to exclude
-using the **`!`** operator.
+Alternatively, we could specify the columns we're not interested in and would
+like to exclude, using the **`!`** operator.
 
 ```{r}
 control_minus_80_responses <- filter(current_responses, group == "Control", voltage == -80)
@@ -208,13 +224,14 @@ control_minus_80_responses <- select(control_responses, !group)
 
 Typically a series of operations will be performed on a data set and assigning
 the result of each to an intermediate object can get quite cumbersome and result
-in code that is not so easy to read.
+in code that isn't easy to read.
 
 The pipe operator, **`%>%`**, can be used to join two or more operations. It
-takes the output from one operation (the one that comes before it) and passes it
-as the first argument to the next function (the one that comes after).
+takes the output from one operation (the one that comes before it) and passes
+the result into the next function (the one that comes after) as the first
+argument.
 
-**`x %>% f(y)`** is equivalent to **`f(x, y)`**
+> **`x %>% f(y)`** is equivalent to **`f(x, y)`**
 
 We'll try this out to rewrite the `filter()` and `select()` operations in the
 previous code snippet.
@@ -223,9 +240,10 @@ previous code snippet.
 filter(current_responses, group == "Control", voltage == -80) %>% select(!group)
 ```
 
-It is more readable to spread this over multiple lines of code.
+It is more readable to spread this over multiple lines of code with a separate
+operation on each line.
 
-```{r}
+```{r eval = FALSE}
 current_responses %>%
   filter(group == "Control", voltage == -80) %>%
   select(!group)
@@ -241,8 +259,8 @@ control_minus_80_responses <- current_responses %>%
 
 # Summarizing tabular data
 
-The `summary()` function we looked at in the introduction section can work on
-tables producing a summary for each.
+The `summary()` function we looked at in the introduction section is able to
+work on tables and produces a summary for each column.
 
 ```{r}
 summary(control_minus_80_responses)
@@ -256,9 +274,9 @@ The tidyverse has its own summarization function.
 summarize(control_minus_80_responses, mean_current = mean(current))
 ```
 
-Unlike computing the mean value directly on the current column as we did before (`mean(control_minus_80_responses$current)`), `summarize()` returns another
-table. This only becomes useful when we're summarizing more than one thing at
-once.
+Unlike computing the mean value of a vector of numbers as we did earlier for
+the "current" column extracted as a vector, `summarize()` returns another table.
+This is useful when we're summarizing more than one thing at once.
 
 ```{r}
 summarize(control_minus_80_responses, Current = mean(current), SD = sd(current), N = n())
@@ -266,8 +284,9 @@ summarize(control_minus_80_responses, Current = mean(current), SD = sd(current),
 
 ## **`group_by()`**
 
-Usually, you'll want to calculate averages, etc., within groups. We can do this
-using the **`group_by()`** function.
+Usually, you'll want to calculate summary values within groups of data that are
+given by categorical variables, i.e. columns containing group names. We can do
+this using the **`group_by()`** function.
 
 For example, we can compute the mean current for each of the different voltages
 in our control samples.
@@ -288,12 +307,38 @@ summary <- current_responses %>%
 summary
 ```
 
+# Sorting
+
+Sometimes we wish to sort the contents of the table by one or more columns.
+
+## **`arrange()`**
+
+Here are some examples of using the `arrange()` function for sorting.
+
+First, we'll sort the values by increasing current density.
+
+```{r}
+arrange(summary, Current)
+```
+Then by decreasing current using `desc()`:
+
+```{r}
+arrange(summary, desc(Current))
+```
+
+Finally we arrange the summarized values by increasing voltage step and then
+group.
+
+```{r}
+arrange(summary, voltage, group)
+```
+
 # Modifying a table
 
-The source data contains values for the mean current density and also the
-standard error. We've calculated the standard deviation and so we can calculate
-the standard error by dividing through by the square root of the number of
-values, or replicates in our case.
+The source data Excel spreadsheet contains values for the mean current density
+and also the standard error. We've calculated the standard deviation but to get
+the standard error we must divide this by the square root of the number of
+observations.
 
 ## **`mutate()`**
 
@@ -301,14 +346,15 @@ The **`mutate()`** lets us add new variables (columns) to a table or modify
 existing ones.
 
 ```{r}
-mutate(summary, SE = SD /sqrt(N))  
+mutate(summary, SE = SD /sqrt(N))
 ```
 
 ## **`rename()`**
 
-We'll put it all together in a single workflow and use the **`rename()`**
-function to rename a couple of columns so the result has consistent column
-naming (capitilization).
+Sometimes we need to rename columns and can do so using the **`rename()``**
+function. Putting it all together, here's an example that includes a renaming
+operation for consistent column naming (capitalization) as well as the other
+operations we've covered.
 
 ```{r}
 summary <- current_responses %>%
@@ -316,7 +362,10 @@ summary <- current_responses %>%
   summarize(Current = mean(current), N = n(), SD = sd(current), .groups = "drop") %>%
   mutate(SE = SD /sqrt(N)) %>%
   rename(Group = group, Voltage = voltage) %>%
-  select(-SD)
+  select(-SD) %>%
+  arrange(Voltage, Group)
 summary
 ```
+# Visualizing tabular data with ggplot2
 
+_Coming soon_
