@@ -123,7 +123,7 @@ xlsx suffix.
 The data for figures 2a and 2b (sheet FIG.2a_b) are not in a very suitable
 format for computational analysis (appears to be more for human readability)
 so we'll use a reformatted version available as a CSV file
-[here](https://github.com/bioinformatics-core-shared-training/r-basics/raw/main/data/current_responses.csv).
+[here](data/current_responses.csv).
 
 Download the CSV file and save or move it to the directory in which you are
 running your R session or that in which you saved your R script. You can find
