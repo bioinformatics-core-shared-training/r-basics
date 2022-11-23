@@ -304,7 +304,7 @@ existing ones.
 mutate(summary, SE = SD /sqrt(N))  
 ```
 
-# **`rename()`**
+## **`rename()`**
 
 We'll put it all together in a single workflow and use the **`rename()`**
 function to rename a couple of columns so the result has consistent column
