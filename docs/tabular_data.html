@@ -370,8 +370,8 @@ interest</li>
 summaries within groups</li>
 <li>Add new columns to tables derived from the values in other
 columns</li>
-<li>Learn about the grammar of graphics used to create plots using the
-popular <strong>ggplot2</strong> package</li>
+<li>Visualize tabular data by creating plots with the popular
+<strong>ggplot2</strong> package</li>
 </ul>
 </blockquote>
 <div id="introduction" class="section level1">
@@ -629,8 +629,7 @@ control_minus_80_responses</code></pre>
 <p>Alternatively, we could specify the columns we’re not interested in
 and would like to exclude, using the <strong><code>!</code></strong>
 operator.</p>
-<pre class="r"><code>control_minus_80_responses &lt;- filter(current_responses, group == &quot;Control&quot;, voltage == -80)
-control_minus_80_responses &lt;- select(control_responses, !group)</code></pre>
+<pre class="r"><code>control_minus_80_responses &lt;- select(control_responses, !group)</code></pre>
 </div>
 </div>
 <div id="chaining-operations-using" class="section level1">
@@ -662,6 +661,14 @@ separate operation on each line.</p>
 <pre class="r"><code>current_responses %&gt;%
   filter(group == &quot;Control&quot;, voltage == -80) %&gt;%
   select(!group)</code></pre>
+<pre><code># A tibble: 5 × 3
+  id       voltage current
+  &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+1 061412c2     -80  -14.0 
+2 061412c1     -80  -27.1 
+3 052512n3     -80   -8.65
+4 060512n2     -80   -8.62
+5 050212c1     -80  -28.8 </code></pre>
 <p>We can assign the result to an object in the usual way.</p>
 <pre class="r"><code>control_minus_80_responses &lt;- current_responses %&gt;%
   filter(group == &quot;Control&quot;, voltage == -80) %&gt;%
@@ -868,7 +875,6 @@ summary</code></pre>
 </div>
 <div id="visualizing-tabular-data-with-ggplot2" class="section level1">
 <h1>Visualizing tabular data with ggplot2</h1>
-<p><em>Coming soon</em></p>
 </div>
 
 

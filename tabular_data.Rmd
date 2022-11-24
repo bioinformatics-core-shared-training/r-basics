@@ -10,7 +10,7 @@ title: 'Working with tabular data in R'
 > * Summarize the values in one or more columns
 > * Group data based on one or more categorical variables and create summaries within groups
 > * Add new columns to tables derived from the values in other columns
-> * Learn about the grammar of graphics used to create plots using the popular **ggplot2** package
+> * Visualize tabular data by creating plots with the popular **ggplot2** package
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(comment = NA)
@@ -215,8 +215,8 @@ control_minus_80_responses
 Alternatively, we could specify the columns we're not interested in and would
 like to exclude, using the **`!`** operator.
 
-```{r}
-control_minus_80_responses <- filter(current_responses, group == "Control", voltage == -80)
+
+```{r eval = FALSE}
 control_minus_80_responses <- select(control_responses, !group)
 ```
 
@@ -243,7 +243,7 @@ filter(current_responses, group == "Control", voltage == -80) %>% select(!group)
 It is more readable to spread this over multiple lines of code with a separate
 operation on each line.
 
-```{r eval = FALSE}
+```{r}
 current_responses %>%
   filter(group == "Control", voltage == -80) %>%
   select(!group)
@@ -368,4 +368,3 @@ summary
 ```
 # Visualizing tabular data with ggplot2
 
-_Coming soon_
