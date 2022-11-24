@@ -11,6 +11,7 @@ title: 'Working with tabular data in R'
 > * Group data based on one or more categorical variables and create summaries within groups
 > * Add new columns to tables derived from the values in other columns
 > * Visualize tabular data by creating plots with the popular **ggplot2** package
+> * Perform a statistical two-sample test
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(comment = NA)
@@ -367,4 +368,147 @@ summary <- current_responses %>%
 summary
 ```
 # Visualizing tabular data with ggplot2
+
+So far we've mainly looked at manipulating and performing calculations on our
+data to get it in the right shape for the analysis we want to do. Now we'll move
+on to creating plots to visualize the data. For this we'll be using the popular
+**ggplot2** package that comes as part of the tidyverse.
+
+## Scatter plot
+
+We'll start with a simple scatter plot.
+
+```{r}
+ggplot(data = summary, aes(x = Voltage, y = Current)) +
+  geom_point()
+```
+
+We specified 3 things to create this plot:
+
+1. The **data** -- needs to be a data frame (or a tibble)
+2. The type of plot -- this is called a **geom** in ggplot2 terminology
+3. The mapping of variables (columns in our table) to visual properties of objects in the plot - these are called **aesthetics** in ggplot2 and specified using the **`aes`** argument
+
+In this case, the type of plot is a **`geom_point`**, ggplot2's function for a
+scatter plot, and the voltage and current density are mapped to the **`x`** and
+**`y`** coordinates.
+
+## Aesthetics
+
+Look up the `geom_point` help page to see the list of aesthetics that are
+available for this geom.
+
+```{r eval = FALSE}
+?geom_point
+```
+
+We have 3 distinct groups and we can help to distinguish these in the plot by
+using another of the aesthetics: colour.
+
+```{r}
+ggplot(data = summary, aes(x = Voltage, y = Current, colour = Group)) +
+  geom_point()
+```
+
+## Line plot
+
+Plots in ggplot2 are built up in layers. We'll add another _geom_ for connecting
+our points to create a line plot.
+
+```{r}
+ggplot(data = summary, aes(x = Voltage, y = Current, colour = Group)) +
+  geom_point() +
+  geom_line()
+```
+
+## Error bars
+
+This now looks a lot more like figure 2b in the Nature Genetics paper, but in
+that figure error bars on each of the points are displayed. We'll add another
+layer to our plot using **`geom_errorbar`**. This requires another two aesthetic
+mappings for the lower and upper bounds representing the uncertainty of each
+current density estimate.
+
+```{r}
+ggplot(summary, aes(x = Voltage, y = Current, ymin = Current - SE, ymax = Current + SE, colour = Group)) +
+  geom_point() +
+  geom_line() +
+  geom_errorbar(width = 2)
+```
+
+The other thing we did here was to adjust the width of the error bars as the
+default setting was not aesthetically pleasing.
+
+Each of the _geoms_ has specific options for changing its appearance. The help
+pages are a good place to start to learn about how each works and have lots of
+example code snippets that you can easily run to understand better how they
+work.
+
+## Customizing plots
+
+You will almost certainly want to customize the appearance of your plots and
+**ggplot2** provides lots of options to do so including the option of specifying
+a theme.
+
+We'll apply one of these themes, change the order in which the layers (geoms)
+are drawn, specify some colours and change the axis labels to make our plot look
+a bit more polished.
+
+```{r}
+ggplot(summary, aes(x = Voltage, y = Current, ymin = Current - SE, ymax = Current + SE, colour = Group)) +
+  geom_errorbar(width = 2, colour = "dimgrey") +
+  geom_line() +
+  geom_point(size = 2) +
+  labs(x = "Voltage (mV)", y = "Current density (pA/pF)", colour = "") +
+  scale_color_manual(values = c("dimgrey", "firebrick", "steelblue")) +
+  scale_x_continuous(breaks = c(-80, -60, -40, -20, 0, 20, 40, 60, 80)) +
+  scale_y_continuous(breaks = c(-40, -20, 0, 20, 40)) +
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+```
+
+# Statistical tests
+
+The analysis of these data in the Nature Genetics paper also includes some
+statistical tests. For example, the authors tested for a statistically
+significant difference in the current response at a voltage step of +80mV
+between the _Nalcn^shDNA^_ and control groups.
+
+We'll first filter the values we need for this comparison.
+
+```{r}
+test_data <- filter(current_responses, voltage == 80, group %in% c("Control", "Nalcn_shRNA"))
+```
+
+Normally we'd visualize our data before applying a statistical test to satisfy
+ourselves that the assumptions of the test hold. We'll create a box plot using
+another of the geoms available in ggplot2, **`geom_boxplot`**.
+
+```{r}
+ggplot(data = test_data, aes(x = group, y = current)) +
+  geom_boxplot()
+```
+
+We only have 5 observations for each group in this case so the box plot is
+perhaps not that useful for looking at the distribution of the data. We'll use
+**`geom_jitter`** to show the points as well.
+
+```{r}
+ggplot(data = test_data, aes(x = group, y = current)) +
+  geom_boxplot(width = 0.4, outlier.shape = NA) +
+  geom_jitter(width = 0.1, size = 2) +
+  labs(x = "", y = "Current density (pA/pF)") +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank())
+```
+
+Finally we'll run a non-parametric Wilcoxon test, also known as the Mann-Whitney
+U test.
+
+```{r}
+wilcox.test(current ~ group, data = test_data)
+```
 

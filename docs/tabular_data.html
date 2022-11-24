@@ -372,6 +372,7 @@ summaries within groups</li>
 columns</li>
 <li>Visualize tabular data by creating plots with the popular
 <strong>ggplot2</strong> package</li>
+<li>Perform a statistical two-sample test</li>
 </ul>
 </blockquote>
 <div id="introduction" class="section level1">
@@ -875,6 +876,134 @@ summary</code></pre>
 </div>
 <div id="visualizing-tabular-data-with-ggplot2" class="section level1">
 <h1>Visualizing tabular data with ggplot2</h1>
+<p>So far we’ve mainly looked at manipulating and performing
+calculations on our data to get it in the right shape for the analysis
+we want to do. Now we’ll move on to creating plots to visualize the
+data. For this we’ll be using the popular <strong>ggplot2</strong>
+package that comes as part of the tidyverse.</p>
+<div id="scatter-plot" class="section level2">
+<h2>Scatter plot</h2>
+<p>We’ll start with a simple scatter plot.</p>
+<pre class="r"><code>ggplot(data = summary, aes(x = Voltage, y = Current)) +
+  geom_point()</code></pre>
+<p><img src="tabular_data_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>We specified 3 things to create this plot:</p>
+<ol style="list-style-type: decimal">
+<li>The <strong>data</strong> – needs to be a data frame (or a
+tibble)</li>
+<li>The type of plot – this is called a <strong>geom</strong> in ggplot2
+terminology</li>
+<li>The mapping of variables (columns in our table) to visual properties
+of objects in the plot - these are called <strong>aesthetics</strong> in
+ggplot2 and specified using the <strong><code>aes</code></strong>
+argument</li>
+</ol>
+<p>In this case, the type of plot is a
+<strong><code>geom_point</code></strong>, ggplot2’s function for a
+scatter plot, and the voltage and current density are mapped to the
+<strong><code>x</code></strong> and <strong><code>y</code></strong>
+coordinates.</p>
+</div>
+<div id="aesthetics" class="section level2">
+<h2>Aesthetics</h2>
+<p>Look up the <code>geom_point</code> help page to see the list of
+aesthetics that are available for this geom.</p>
+<pre class="r"><code>?geom_point</code></pre>
+<p>We have 3 distinct groups and we can help to distinguish these in the
+plot by using another of the aesthetics: colour.</p>
+<pre class="r"><code>ggplot(data = summary, aes(x = Voltage, y = Current, colour = Group)) +
+  geom_point()</code></pre>
+<p><img src="tabular_data_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+</div>
+<div id="line-plot" class="section level2">
+<h2>Line plot</h2>
+<p>Plots in ggplot2 are built up in layers. We’ll add another
+<em>geom</em> for connecting our points to create a line plot.</p>
+<pre class="r"><code>ggplot(data = summary, aes(x = Voltage, y = Current, colour = Group)) +
+  geom_point() +
+  geom_line()</code></pre>
+<p><img src="tabular_data_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+</div>
+<div id="error-bars" class="section level2">
+<h2>Error bars</h2>
+<p>This now looks a lot more like figure 2b in the Nature Genetics
+paper, but in that figure error bars on each of the points are
+displayed. We’ll add another layer to our plot using
+<strong><code>geom_errorbar</code></strong>. This requires another two
+aesthetic mappings for the lower and upper bounds representing the
+uncertainty of each current density estimate.</p>
+<pre class="r"><code>ggplot(summary, aes(x = Voltage, y = Current, ymin = Current - SE, ymax = Current + SE, colour = Group)) +
+  geom_point() +
+  geom_line() +
+  geom_errorbar(width = 2)</code></pre>
+<p><img src="tabular_data_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>The other thing we did here was to adjust the width of the error bars
+as the default setting was not aesthetically pleasing.</p>
+<p>Each of the <em>geoms</em> has specific options for changing its
+appearance. The help pages are a good place to start to learn about how
+each works and have lots of example code snippets that you can easily
+run to understand better how they work.</p>
+</div>
+<div id="customizing-plots" class="section level2">
+<h2>Customizing plots</h2>
+<p>You will almost certainly want to customize the appearance of your
+plots and <strong>ggplot2</strong> provides lots of options to do so
+including the option of specifying a theme.</p>
+<p>We’ll apply one of these themes, change the order in which the layers
+(geoms) are drawn, specify some colours and change the axis labels to
+make our plot look a bit more polished.</p>
+<pre class="r"><code>ggplot(summary, aes(x = Voltage, y = Current, ymin = Current - SE, ymax = Current + SE, colour = Group)) +
+  geom_errorbar(width = 2, colour = &quot;dimgrey&quot;) +
+  geom_line() +
+  geom_point(size = 2) +
+  labs(x = &quot;Voltage (mV)&quot;, y = &quot;Current density (pA/pF)&quot;, colour = &quot;&quot;) +
+  scale_color_manual(values = c(&quot;dimgrey&quot;, &quot;firebrick&quot;, &quot;steelblue&quot;)) +
+  scale_x_continuous(breaks = c(-80, -60, -40, -20, 0, 20, 40, 60, 80)) +
+  scale_y_continuous(breaks = c(-40, -20, 0, 20, 40)) +
+  theme_minimal() +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  )</code></pre>
+<p><img src="tabular_data_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+</div>
+</div>
+<div id="statistical-tests" class="section level1">
+<h1>Statistical tests</h1>
+<p>The analysis of these data in the Nature Genetics paper also includes
+some statistical tests. For example, the authors tested for a
+statistically significant difference in the current response at a
+voltage step of +80mV between the <em>Nalcn<sup>shDNA</sup></em> and
+control groups.</p>
+<p>We’ll first filter the values we need for this comparison.</p>
+<pre class="r"><code>test_data &lt;- filter(current_responses, voltage == 80, group %in% c(&quot;Control&quot;, &quot;Nalcn_shRNA&quot;))</code></pre>
+<p>Normally we’d visualize our data before applying a statistical test
+to satisfy ourselves that the assumptions of the test hold. We’ll create
+a box plot using another of the geoms available in ggplot2,
+<strong><code>geom_boxplot</code></strong>.</p>
+<pre class="r"><code>ggplot(data = test_data, aes(x = group, y = current)) +
+  geom_boxplot()</code></pre>
+<p><img src="tabular_data_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<p>We only have 5 observations for each group in this case so the box
+plot is perhaps not that useful for looking at the distribution of the
+data. We’ll use <strong><code>geom_jitter</code></strong> to show the
+points as well.</p>
+<pre class="r"><code>ggplot(data = test_data, aes(x = group, y = current)) +
+  geom_boxplot(width = 0.4, outlier.shape = NA) +
+  geom_jitter(width = 0.1, size = 2) +
+  labs(x = &quot;&quot;, y = &quot;Current density (pA/pF)&quot;) +
+  theme_minimal() +
+  theme(panel.grid.major.x = element_blank())</code></pre>
+<p><img src="tabular_data_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<p>Finally we’ll run a non-parametric Wilcoxon test, also known as the
+Mann-Whitney U test.</p>
+<pre class="r"><code>wilcox.test(current ~ group, data = test_data)</code></pre>
+<pre><code>
+    Wilcoxon rank sum exact test
+
+data:  current by group
+W = 25, p-value = 0.007937
+alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 
 
