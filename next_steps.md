@@ -3,8 +3,8 @@ title: 'Next steps'
 ---
 
 Congratulations! You have just embarked on a journey into the world of data
-analysis in R. Depending on your needs there are several resources to choose
-from to further your R skills.  
+analysis in R. Here are some resources and other courses that can help you
+further develop your R skills.
 
 # Other training courses
 
